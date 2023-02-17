@@ -1,7 +1,9 @@
 require_relative 'display'
+require_relative 'serialize'
 
 class Hangman
   include Display
+  include Serialize
   attr_accessor :word, :turns, :display_word, :current_player_guess, :correct_guess, :incorrect_guess
 
   def initialize (turns = 10)
@@ -64,6 +66,9 @@ class Hangman
       puts display_word
       self.turns = 0
     end
+    if turns == 0
+      puts "YOU LOSE! The word was #{word}"
+    end
   end
 
   def start_game
@@ -76,7 +81,19 @@ class Hangman
       check_win
     end
   end
+
+  def save_game
+    serialize_save(word, turns, display_word, current_player_guess, correct_guess, incorrect_guess)
+    puts 'file saved'
+  end
+
+  def load_game(target)
+    serialize_load(target)
+    puts 'file loaded'
+  end
 end
 
 new_game = Hangman.new
-new_game.start_game
+#new_game.start_game
+#new_game.save_game
+new_game.load_game('2023-02-16 20:25:43 -0500')
