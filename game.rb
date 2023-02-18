@@ -28,6 +28,8 @@ class Hangman
         self.current_player_guess = player_guess
         player_input_duplicate
         return player_guess
+      elsif player_guess == 'save'
+        save_game
       else
         puts "INVALID INPUT"
       end
@@ -66,15 +68,28 @@ class Hangman
       puts display_word
       self.turns = 0
     end
-    if turns == 0
+    if turns == 0 && word.split('') != display_word.split(' ')
       puts "YOU LOSE! The word was #{word}"
     end
   end
 
+  def load_option
+    puts "Please type (1) to start new game or (2) to load game"
+    choice = gets.chomp
+    if choice == '2'
+      puts "Please type your save file name"
+      save_file = gets.chomp
+      load_game(save_file)
+    end
+  end
+
   def start_game
+    load_option
     display
+    puts "correct: #{correct_guess}"
+    puts "incorrect: #{incorrect_guess}"
     while turns.positive?
-      puts display_word
+      puts correct_guess_to_display
       puts "guess a letter / turns left: #{turns}\n\n"
       player_guess_to_display(char_match_word(player_input)) #have function to check
       self.turns -= 1
@@ -83,17 +98,23 @@ class Hangman
   end
 
   def save_game
-    serialize_save(word, turns, display_word, current_player_guess, correct_guess, incorrect_guess)
+    puts "enter the name of your save file"
+    name = gets.chomp
+    serialize_save(name, word, turns, display_word, current_player_guess, correct_guess, incorrect_guess)
     puts 'file saved'
   end
 
   def load_game(target)
-    serialize_load(target)
+    loaded = serialize_load(target)
+    self.word = loaded[0]
+    self.turns = loaded[1]
+    self.display_word = loaded[2]
+    self.current_player_guess = loaded[3]
+    self.correct_guess = loaded[4]
+    self.incorrect_guess = loaded[5]
     puts 'file loaded'
   end
 end
 
 new_game = Hangman.new
-#new_game.start_game
-#new_game.save_game
-new_game.load_game('2023-02-16 20:25:43 -0500')
+new_game.start_game

@@ -1,12 +1,12 @@
 require 'time'
 module Serialize
-  def serialize_save(*args)
+  def serialize_save(name,*args)
     array = []
     args.each do |a|
       array.push(a)
     end
     save = Marshal.dump(array)
-    File.new(Time.now.to_s, 'w').write(save)
+    File.new(name, 'w').write(save)
   end
 
   def serialize_load(target)
