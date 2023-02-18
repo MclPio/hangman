@@ -74,17 +74,28 @@ class Hangman
   end
 
   def load_option
-    puts "Please type (1) to start new game or (2) to load game"
-    choice = gets.chomp
-    if choice == '2'
-      puts "Please type your save file name"
-      save_file = gets.chomp
-      load_game(save_file)
+    loop do
+      puts "Please type (1) to start new game or (2) to load game"
+      choice = gets.chomp
+      if choice == '2'
+        puts "Please type your save file name"
+        save_file = gets.chomp
+        begin
+          load_game(save_file)
+          break
+        rescue Errno::ENOENT
+          puts "File does not exist"
+          next
+        end
+      elsif choice == '1'
+        break
+      end
     end
   end
 
   def start_game
     load_option
+    puts "You can type 'save' to save your game"
     display
     puts "correct: #{correct_guess}"
     puts "incorrect: #{incorrect_guess}"
