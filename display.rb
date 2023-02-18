@@ -1,6 +1,5 @@
 module Display
   def display
-    p word
     word_length = word.length
     array = []
     word_length.times {array.push('_')}

@@ -113,6 +113,10 @@ class Hangman
     name = gets.chomp
     serialize_save(name, word, turns, display_word, current_player_guess, correct_guess, incorrect_guess)
     puts 'file saved'
+    display
+    puts "correct: #{correct_guess}"
+    puts "incorrect: #{incorrect_guess}"
+    puts correct_guess_to_display
   end
 
   def load_game(target)
