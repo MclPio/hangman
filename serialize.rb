@@ -6,11 +6,11 @@ module Serialize
       array.push(a)
     end
     save = Marshal.dump(array)
-    File.new(name, 'w').write(save)
+    File.new("save/#{name}", 'w').write(save)
   end
 
   def serialize_load(target)
-    save_file = File.open(target)
+    save_file = File.open("save/#{target}")
     load = Marshal.load(save_file)
   end
 end
